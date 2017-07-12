@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<suite name='Suite1' parallel="tests">
+
+    <test name="demo1">
+        <parameter name = "port" value = "4723"/>
+        <parameter name = "udid" value = "7N2MYN1528001420"/>
+        <classes>
+            <class name="testcase.DriverLoginTest"/>
+        </classes>
+    </test>
+
+<!--    <test name="demo2">
+        <parameter name = "port" value = "4724"/>
+        <parameter name = "udid" value = "ZX1G722D9V"/>
+        <classes>
+            <class name="testcase.DriverLoginTest"/>
+        </classes>
+    </test>-->
+
+</suite>
