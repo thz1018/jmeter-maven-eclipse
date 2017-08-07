@@ -1,14 +1,18 @@
 package testcase;
 
+import Listener.ScreenshotListener;
 import com.tools.AndroidDriverWait;
 import com.tools.ExpectedCondition;
 import com.ymm.app.android.activity.EvcardMainActivityAndroid;
 import com.ymm.app.android.activity.EvcardSplashActivity;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -18,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Cheney Wong
  */
+@Listeners({ScreenshotListener.class})
 public class BusinessTest {
     private AndroidDriver<AndroidElement> androidDriver;
     /* activities */
@@ -47,5 +52,14 @@ public class BusinessTest {
             AndroidElement textView = androidDriver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
             string = textView.getText();
         } while (string.equals(" X 0"));
+    }
+
+    @AfterClass
+    public void tearDown(){
+        androidDriver.closeApp();
+    }
+
+    public AndroidDriver<AndroidElement> getDriver(){
+        return androidDriver;
     }
 }
