@@ -26,13 +26,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class DriverLoginTest extends AutoDataDriverBase {
 
+    /**
+     * 11122233300
+     * m12345
+     * 123456
+     */
     private AndroidDriver<AndroidElement> driver;
     private Evcard_Welcome_Activity_Android evcard_Welcome_Activity_Android;
     private AndroidElement SiteTextView;
     private int pixel=100;
+    AppiumServer appiumServer;
 
-    @BeforeTest()
-    //@Parameters({"port","udid"})
+    //@Parameters({"port","udid","appname"})
+    @BeforeTest
     public void setUp() throws Exception{
 
         //读取properties配置
@@ -49,34 +55,36 @@ public class DriverLoginTest extends AutoDataDriverBase {
         }
 
         //启动Appium server
-        AppiumServer appiumServer=new AppiumServer();
-        appiumServer.runServer(4723,"7N2MYN1528001420");
-        appiumServer.runServer(4724,"ZX1G722D9V");
+        //appiumServer=new AppiumServer();
+        //appiumServer.runServer(port,udid);
+        //appiumServer.runServer(4723,"dbe2cc28");
+        //appiumServer.runServer(port,"ZX1G722D9V");
 
         //安装指定APK文件
         File classpathRoot = new File(System.getProperty("user.dir"));
         File appDir = new File(classpathRoot, "app");
-        File app = new File(appDir, "evcard.apk");
+        File app = new File(appDir, "evcard_Android_TEST_2_7_0.apk");
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("deviceName", properties.getProperty("deviceName", "test"));
         capabilities.setCapability("platformVersion", properties.getProperty("platformVersion", "test"));
-        //capabilities.setCapability("udid",udid);
+       // capabilities.setCapability("udid",udid);
         capabilities.setCapability("udid",properties.getProperty("udid", "test"));
         capabilities.setCapability("appPackage", properties.getProperty("appPackage", "test"));
-        //capabilities.setCapability("appActivity", properties.getProperty("appActivity", "test"));
+//        capabilities.setCapability("appActivity", properties.getProperty("appActivity", "test"));
         capabilities.setCapability("app", app.getAbsolutePath());
         //不需要每次安装
-        //capabilities.setCapability("noReset", true);
+        capabilities.setCapability("noReset", true);
         //driver = new AndroidDriver<AndroidElement>(new URL("http://127.0.0.1:"+port+"/wd/hub"), capabilities);
+        //driver = new AndroidDriver<AndroidElement>(new URL("http://10.1.55.202:"+port+"/wd/hub"), capabilities);
         driver = new AndroidDriver<AndroidElement>(new URL(properties.getProperty("url", "test")), capabilities);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
     }
 
     //,threadPoolSize=2
-    @Test(dataProvider = "CsvDataProvider",priority = 1)
-    public void LoginTest(String telephoneNum, String code) throws UnsupportedEncodingException {
+    @Test(priority = 1)
+    public void LoginTest() throws UnsupportedEncodingException {
         this.evcard_Welcome_Activity_Android=new Evcard_Welcome_Activity_Android(this.driver);
         //关闭欢迎页面按钮
         evcard_Welcome_Activity_Android.Clear();
@@ -98,14 +106,14 @@ public class DriverLoginTest extends AutoDataDriverBase {
         Assert.assertNotEquals(driver.currentActivity().toString(), ".common.ui.WelcomeActivity");*/
     }
 
-    @Test(priority = 2)
+    @Test(priority = 2,enabled = true)
     //站点信息校验
     public void CheckSiteInfo(){
         this.evcard_Welcome_Activity_Android=new Evcard_Welcome_Activity_Android(this.driver);
         //关闭欢迎页面按钮
         evcard_Welcome_Activity_Android.Clear();
         evcard_Welcome_Activity_Android.FindSite();
-        SiteTextView = driver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
+        SiteTextView = driver.findElement(By.id("com.bao sight.carsharing:id/new_allow_car_count"));
         //点击查找附近网点
         while (!SiteTextView.getText().equals(" X  0"))
         {
@@ -119,12 +127,11 @@ public class DriverLoginTest extends AutoDataDriverBase {
 
     }
 
-
     @AfterTest
     public void tearDown() {
         driver.quit();
+        appiumServer.stopserver();
     }
-
 
     //关闭APP方法
     public void closeApp()

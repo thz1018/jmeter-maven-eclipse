@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<suite name='Suite1' parallel="tests">
-
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<suite name='Evcard Suite' parallel="tests" thread-count="2">
     <test name="demo1">
         <parameter name = "port" value = "4723"/>
         <parameter name = "udid" value = "7N2MYN1528001420"/>
+        <parameter name = "appname" value = "evcard.apk"/>
         <classes>
             <class name="testcase.DriverLoginTest"/>
         </classes>
     </test>
-
-<!--    <test name="demo2">
+    <test name="demo2">
         <parameter name = "port" value = "4724"/>
         <parameter name = "udid" value = "ZX1G722D9V"/>
+        <parameter name = "appname" value = "evcard2.apk"/>
         <classes>
             <class name="testcase.DriverLoginTest"/>
         </classes>
-    </test>-->
-
+    </test>
 </suite>

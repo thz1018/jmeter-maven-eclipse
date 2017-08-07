@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
  */
 public class AppiumServer {
     private static final Logger log = LogManager.getLogger(AppiumServer.class);
+    Process p;
 
     public AppiumServer() {
         KillTask("node.exe");
@@ -34,7 +35,8 @@ public class AppiumServer {
 
     private void runCommand(String command) {
         try {
-            Runtime.getRuntime().exec(command);
+            p=Runtime.getRuntime().exec(command);
+            log.info("Wait to Appium server restart 3600ms ");
             Thread.sleep(3600);
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,8 +45,11 @@ public class AppiumServer {
         }
     }
 
-    public static void main(String[] args){
-        AppiumServer appiumServer=new AppiumServer();
-        appiumServer.runServer(4723,"7N2MYN1528001420");
+    public void stopserver(){
+        if(p!=null){
+            p.destroy();
+        }
+        log.info("Appium server is stopped now.");
     }
+
 }
