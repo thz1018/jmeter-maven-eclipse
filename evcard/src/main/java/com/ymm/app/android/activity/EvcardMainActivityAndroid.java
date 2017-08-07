@@ -148,6 +148,14 @@ public class EvcardMainActivityAndroid {
         androidDriver.swipe(width / 2, height / 2, width * 3 / 4, height / 2, 500);
     }
 
+    /* swipe from center to right */
+    public void swipeToLeft() {
+        GeneralAppOperation.appWait(1000);
+        int width = androidDriver.manage().window().getSize().width;
+        int height = androidDriver.manage().window().getSize().height;
+        androidDriver.swipe(width / 2, height / 2, width / 4, height / 2, 500);
+    }
+
 
     /* get available car list */
     public List<AndroidElement> getAvailableCarList() {
@@ -185,7 +193,7 @@ public class EvcardMainActivityAndroid {
     /* click ordering success */
     public void clickOrderingSuccess() {
         try {
-            AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 15);
+            AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 120);
             WebElement element = wait.until(new ExpectedCondition<WebElement>() {
                 @Override
                 public WebElement apply(AndroidDriver androidDriver) {
@@ -193,6 +201,7 @@ public class EvcardMainActivityAndroid {
                 }
             });
             GeneralAppOperation.appWait(1000);
+            element.click();
         } catch (Exception e) {
             System.out.println(">>> ordering failed");
         }
@@ -235,9 +244,20 @@ public class EvcardMainActivityAndroid {
 
     /* click 5 star */
     public void click5Star() {
-        GeneralAppOperation.appWait(15000);
-        imageView = androidDriver.findElement(By.id("com.baosight.carsharing:id/img_star5"));
-        imageView.click();
+        GeneralAppOperation.appWait(30000);
+        try {
+            AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 120);
+            WebElement element = wait.until(new ExpectedCondition<WebElement>() {
+                @Override
+                public WebElement apply(AndroidDriver androidDriver) {
+                    return androidDriver.findElement(By.id("com.baosight.carsharing:id/img_star5"));
+                }
+            });
+            GeneralAppOperation.appWait(1000);
+            element.click();
+        } catch (Exception e) {
+            System.out.println(">>> return fail");
+        }
     }
 
     /* fill comment */

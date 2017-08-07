@@ -1,9 +1,14 @@
 package testcase;
 
+import Listener.ScreenshotListener;
+import org.testng.annotations.Listeners;
 import com.ymm.app.android.activity.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.By;
+import com.ymm.app.android.activity.EvcardMainActivityAndroid;
+import com.ymm.app.android.activity.EvcardSplashActivity;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -13,15 +18,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * Create on 2017/8/7 11:07
  *
  * @author Cheney Wong
  */
+@Listeners({ScreenshotListener.class})
 public class BusinessTest {
-    private AndroidDriver<AndroidElement> androidDriver;
+    private static AndroidDriver<AndroidElement> androidDriver;
     /* activity entities */
     private EvcardSplashActivity splashActivity;
     private EvcardMainActivityAndroid mainActivityAndroid;
@@ -31,7 +37,8 @@ public class BusinessTest {
     private EvcardProcessManagerActivityAndroid processManagerActivityAndroid;
     private EvcardMyRecordActivityAndroid myRecordActivityAndroid;
     private EvcardMakeInvoiceActivityAndroid makeInvoiceActivityAndroid;
-    private EvcardHelpRegisterActivityAndroid helpRegisterActivityAndroid;
+    /* back to making invoice */
+    private EvcardHelpRegisterActivityAndroid helpRegisterActivityAndroid = new EvcardHelpRegisterActivityAndroid(this.androidDriver);
     private EvcardInvoiceHistoryActivityAndroid invoiceHistoryActivityAndroid;
     private EvcardWalletActivityAndroid walletActivityAndroid;
     private EvcardQueryEmountActivityAndroid emountActivityAndroid;
@@ -51,9 +58,9 @@ public class BusinessTest {
 
     @Test
     public void loginTest() {
-        splashActivity = new EvcardSplashActivity(this.androidDriver);
-        mainActivityAndroid = new EvcardMainActivityAndroid(this.androidDriver);
-        loginActivityAndroid = new EvcardLoginActivityAndroid(this.androidDriver);
+        splashActivity = new EvcardSplashActivity(androidDriver);
+        mainActivityAndroid = new EvcardMainActivityAndroid(androidDriver);
+        loginActivityAndroid = new EvcardLoginActivityAndroid(androidDriver);
         /* skip splash screen */
         splashActivity.clickSkipBtn();
         /* close activity page when it appears */
@@ -87,10 +94,10 @@ public class BusinessTest {
     @Test
     public void MainMenuTraversalTest() {
         /* skip splash screen */
-        splashActivity = new EvcardSplashActivity(this.androidDriver);
+        splashActivity = new EvcardSplashActivity(androidDriver);
         splashActivity.clickSkipBtn();
         /* close activity page when it appears */
-        mainActivityAndroid = new EvcardMainActivityAndroid(this.androidDriver);
+        mainActivityAndroid = new EvcardMainActivityAndroid(androidDriver);
         mainActivityAndroid.closeActivityPage();
         /* close welcome page when it appears */
         mainActivityAndroid.closeWelcomePage();
@@ -104,20 +111,20 @@ public class BusinessTest {
         /* open user information */
         mainActivityAndroid.clickImgHead();
         /* open modify phone */
-        userInfosActivityAndroid = new EvcardUserInfosActivityAndroid(this.androidDriver);
+        userInfosActivityAndroid = new EvcardUserInfosActivityAndroid(androidDriver);
         userInfosActivityAndroid.clickModifyPhone();
         /* back to user information */
-        modifyPhoneActivityAndroid = new EvcardModifyPhoneActivityAndroid((this.androidDriver));
+        modifyPhoneActivityAndroid = new EvcardModifyPhoneActivityAndroid((androidDriver));
         modifyPhoneActivityAndroid.clickBack();
         /* open identification */
         userInfosActivityAndroid.clickIdentification();
         /* back to user information */
-        userInfoUploadActivityAndroid = new EvcardUserInfoUploadActivityAndroid((this.androidDriver));
+        userInfoUploadActivityAndroid = new EvcardUserInfoUploadActivityAndroid((androidDriver));
         userInfoUploadActivityAndroid.clickBack();
         /* open application process query */
         userInfosActivityAndroid.clickProgressQuery();
         /* back to user information */
-        processManagerActivityAndroid = new EvcardProcessManagerActivityAndroid(this.androidDriver);
+        processManagerActivityAndroid = new EvcardProcessManagerActivityAndroid(androidDriver);
         processManagerActivityAndroid.clickBack();
         /* back to main menu */
         userInfosActivityAndroid.clickBack();
@@ -129,13 +136,13 @@ public class BusinessTest {
         /* open order management */
         mainActivityAndroid.clickOrder();
         /* open undo, done and all orders */
-        myRecordActivityAndroid = new EvcardMyRecordActivityAndroid(this.androidDriver);
+        myRecordActivityAndroid = new EvcardMyRecordActivityAndroid(androidDriver);
         myRecordActivityAndroid.clickUndo();
         myRecordActivityAndroid.clickDone();
         myRecordActivityAndroid.clickAll();
         /* open making invoice */
         myRecordActivityAndroid.clickInvoice();
-        makeInvoiceActivityAndroid = new EvcardMakeInvoiceActivityAndroid(this.androidDriver);
+        makeInvoiceActivityAndroid = new EvcardMakeInvoiceActivityAndroid(androidDriver);
         /* check ebi order and uncheck borrowing order */
         makeInvoiceActivityAndroid.clickCheckboxEbi();
         makeInvoiceActivityAndroid.clickCheckboxOrder();
@@ -143,13 +150,11 @@ public class BusinessTest {
         makeInvoiceActivityAndroid.clickCheckboxCheckAll();
         /* open invoice illustration */
         makeInvoiceActivityAndroid.clickIllustration();
-        /* back to making invoice */
-        helpRegisterActivityAndroid = new EvcardHelpRegisterActivityAndroid(this.androidDriver);
         helpRegisterActivityAndroid.clickBack();
         /* open invoice history */
         makeInvoiceActivityAndroid.clickInvoiceHistory();
         /* open processing and done invoice */
-        invoiceHistoryActivityAndroid = new EvcardInvoiceHistoryActivityAndroid(this.androidDriver);
+        invoiceHistoryActivityAndroid = new EvcardInvoiceHistoryActivityAndroid(androidDriver);
         invoiceHistoryActivityAndroid.clickInvoiceprocessing();
         invoiceHistoryActivityAndroid.clickInvoiceDone();
         /* back to making invoice */
@@ -166,20 +171,20 @@ public class BusinessTest {
         /* open wallet */
         mainActivityAndroid.clickWallet();
         /* open charging details */
-        walletActivityAndroid = new EvcardWalletActivityAndroid(this.androidDriver);
+        walletActivityAndroid = new EvcardWalletActivityAndroid(androidDriver);
         walletActivityAndroid.clickBalance();
         /* open expired ebi record */
-        emountActivityAndroid = new EvcardQueryEmountActivityAndroid(this.androidDriver);
+        emountActivityAndroid = new EvcardQueryEmountActivityAndroid(androidDriver);
         emountActivityAndroid.clickEbiExpired();
         /* back to charging details */
-        guoQiEmountActivityAndroid = new EvcardQueryGuoQiEmountActivityAndroid(this.androidDriver);
+        guoQiEmountActivityAndroid = new EvcardQueryGuoQiEmountActivityAndroid(androidDriver);
         guoQiEmountActivityAndroid.clickBack();
         /* back to wallet */
         emountActivityAndroid.clickBack();
         /* open recharging */
         walletActivityAndroid.clickEbiCharge();
         /* check AliPay, Wechat and Unibank */
-        eChargeActivityAndroid = new EvcardEChargeActivityAndroid(this.androidDriver);
+        eChargeActivityAndroid = new EvcardEChargeActivityAndroid(androidDriver);
         eChargeActivityAndroid.clickWechat();
         eChargeActivityAndroid.clickUnibank();
         eChargeActivityAndroid.clickAlipay();
@@ -188,16 +193,15 @@ public class BusinessTest {
         /* open deposit recharging */
         walletActivityAndroid.clickDeposit();
         /* open normal deposit recharging */
-        cashPledgesItmsActivityAndroid = new EvcardCashPledgesItmsActivityAndroid(this.androidDriver);
+        cashPledgesItmsActivityAndroid = new EvcardCashPledgesItmsActivityAndroid(androidDriver);
         cashPledgesItmsActivityAndroid.clickNormalDeposit();
         /* back to deposit recharging */
-        depositActivityAndroid = new EvcardDepositActivityAndroid(this.androidDriver);
+        depositActivityAndroid = new EvcardDepositActivityAndroid(androidDriver);
         depositActivityAndroid.clickBack();
-        ;
         /* open premium deposit recharging */
         cashPledgesItmsActivityAndroid.clickPremiumDeposit();
         /* back to premium deposit charging */
-        highGradeDepositActivityAndroid = new EvcardHighGradeDepositActivityAndroid(this.androidDriver);
+        highGradeDepositActivityAndroid = new EvcardHighGradeDepositActivityAndroid(androidDriver);
         highGradeDepositActivityAndroid.clickBack();
         /* back to deposit recharging */
         cashPledgesItmsActivityAndroid.clickBack();
@@ -206,19 +210,19 @@ public class BusinessTest {
     @Test
     public void leasingTest() {
         /* skip splash screen */
-        splashActivity = new EvcardSplashActivity(this.androidDriver);
+        splashActivity = new EvcardSplashActivity(androidDriver);
         splashActivity.clickSkipBtn();
         /* close activity page and welcome page if they appear */
-        mainActivityAndroid = new EvcardMainActivityAndroid(this.androidDriver);
+        mainActivityAndroid = new EvcardMainActivityAndroid(androidDriver);
         mainActivityAndroid.closeActivityPage();
         mainActivityAndroid.closeWelcomePage();
         /* repeat searching until find available cars */
         mainActivityAndroid.clickSearch();
         AndroidElement textView = androidDriver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
         String string = textView.getText();
-        while (string.equals(" X 0")) {
+        while (string.equals(" X  0")) {
             androidDriver.pressKeyCode(4);
-            mainActivityAndroid.swipeToRight();
+            mainActivityAndroid.swipeToLeft();
             mainActivityAndroid.clickSearch();
             textView = androidDriver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
             string = textView.getText();
@@ -241,5 +245,14 @@ public class BusinessTest {
         mainActivityAndroid.clickPayment();
         mainActivityAndroid.clickConfirmPayment();
         mainActivityAndroid.clickFinish();
+    }
+
+    @AfterClass
+    public void tearDown() {
+        androidDriver.closeApp();
+    }
+
+    public static AndroidDriver<AndroidElement> getDriver() {
+        return androidDriver;
     }
 }
