@@ -45,7 +45,7 @@ public class AndroidDriverWait extends FluentWait<AndroidDriver> {
      * the 'until' condition, and immediately propagate all others.  You can add more to the ignore
      * list by calling ignoring(exceptions to add).
      *
-     * @param driver           The WebDriver instance to pass to the expected conditions
+     * @param driver           The AndroidDriver instance to pass to the expected conditions
      * @param timeOutInSeconds The timeout in seconds when an expectation is called
      * @see AndroidDriverWait#ignoring(java.lang.Class)
      */
@@ -58,7 +58,7 @@ public class AndroidDriverWait extends FluentWait<AndroidDriver> {
      * the 'until' condition, and immediately propagate all others.  You can add more to the ignore
      * list by calling ignoring(exceptions to add).
      *
-     * @param driver           The WebDriver instance to pass to the expected conditions
+     * @param driver           The AndroidDriver instance to pass to the expected conditions
      * @param timeOutInSeconds The timeout in seconds when an expectation is called
      * @param sleepInMillis    The duration in milliseconds to sleep between polls.
      * @see AndroidDriverWait#ignoring(java.lang.Class)

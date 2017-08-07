@@ -111,9 +111,9 @@ public class DriverLoginTest extends AutoDataDriverBase {
     public void CheckSiteInfo(){
         this.evcard_Welcome_Activity_Android=new Evcard_Welcome_Activity_Android(this.driver);
         //关闭欢迎页面按钮
-        evcard_Welcome_Activity_Android.Clear();
+//        evcard_Welcome_Activity_Android.Clear();
         evcard_Welcome_Activity_Android.FindSite();
-        SiteTextView = driver.findElement(By.id("com.bao sight.carsharing:id/new_allow_car_count"));
+        SiteTextView = driver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
         //点击查找附近网点
         while (!SiteTextView.getText().equals(" X  0"))
         {
