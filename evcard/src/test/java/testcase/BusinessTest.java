@@ -294,7 +294,7 @@ public class BusinessTest {
         String message = "请输入充值金额";
         try {
             AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 5);
-
+            GeneralAppOperation.appWait(100);
             WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//*[contains(@text,'" + message + "')]")));
             System.out.println(element.toString());
         } catch (Exception e) {

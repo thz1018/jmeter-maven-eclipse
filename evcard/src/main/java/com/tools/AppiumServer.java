@@ -36,8 +36,8 @@ public class AppiumServer {
     private void runCommand(String command) {
         try {
             p=Runtime.getRuntime().exec(command);
-            log.info("Wait to Appium server restart 3600ms ");
-            Thread.sleep(3600);
+            log.info("Wait to Appium server restart 4000ms ");
+            Thread.sleep(4000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

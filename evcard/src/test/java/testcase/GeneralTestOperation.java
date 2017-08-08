@@ -48,13 +48,14 @@ class GeneralTestOperation {
         capabilities.setCapability("appPackage", properties.getProperty("appPackage", "test"));
         capabilities.setCapability("app", app.getAbsolutePath());
         /* do not install every time */
-        capabilities.setCapability("noReset", true);
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         /* convert input into unicode keyboard */
         capabilities.setCapability("unicodeKeyboard", "True");
         /* reset to default keyboard after operations */
         capabilities.setCapability("resetKeyboard", "True");
         capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
-        AndroidDriver<AndroidElement> androidDriver = new AndroidDriver<AndroidElement>(new URL(properties.getProperty("url", "test")), capabilities);
+        //AndroidDriver<AndroidElement> androidDriver = new AndroidDriver<AndroidElement>(new URL(properties.getProperty("url", "test")), capabilities);
+        AndroidDriver<AndroidElement> androidDriver = new AndroidDriver<AndroidElement>(new URL("http://127.0.0.1:"+4723+"/wd/hub"), capabilities);
         return androidDriver;
     }
 }
