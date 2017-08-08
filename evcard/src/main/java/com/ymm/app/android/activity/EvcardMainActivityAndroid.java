@@ -6,6 +6,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 
 import java.util.List;
 
@@ -244,12 +246,15 @@ public class EvcardMainActivityAndroid {
 
     /* click 5 star */
     public void click5Star() {
-        GeneralAppOperation.appWait(30000);
         try {
+            final String toast = "操作失败，请重试！";
             AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 120);
             WebElement element = wait.until(new ExpectedCondition<WebElement>() {
                 @Override
                 public WebElement apply(AndroidDriver androidDriver) {
+//                    if (androidDriver.findElement(By.xpath(".//*[contains(@text,'" + toast + "')]")) != null) {
+//                        throw new Exception(">>> toast appears");
+//                    }
                     return androidDriver.findElement(By.id("com.baosight.carsharing:id/img_star5"));
                 }
             });

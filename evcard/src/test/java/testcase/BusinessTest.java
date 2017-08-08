@@ -1,6 +1,10 @@
 package testcase;
 
 import Listener.ScreenshotListener;
+import com.tools.AndroidDriverWait;
+import com.tools.AppiumServer;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.annotations.Listeners;
 import com.ymm.app.android.activity.*;
 import io.appium.java_client.android.AndroidDriver;
@@ -27,6 +31,7 @@ import java.util.Properties;
  */
 @Listeners({ScreenshotListener.class})
 public class BusinessTest {
+    private AppiumServer appiumServer;
     private static AndroidDriver<AndroidElement> androidDriver;
     /* activity entities */
     private EvcardSplashActivity splashActivity;
@@ -37,8 +42,7 @@ public class BusinessTest {
     private EvcardProcessManagerActivityAndroid processManagerActivityAndroid;
     private EvcardMyRecordActivityAndroid myRecordActivityAndroid;
     private EvcardMakeInvoiceActivityAndroid makeInvoiceActivityAndroid;
-    /* back to making invoice */
-    private EvcardHelpRegisterActivityAndroid helpRegisterActivityAndroid = new EvcardHelpRegisterActivityAndroid(this.androidDriver);
+    private EvcardHelpRegisterActivityAndroid helpRegisterActivityAndroid;
     private EvcardInvoiceHistoryActivityAndroid invoiceHistoryActivityAndroid;
     private EvcardWalletActivityAndroid walletActivityAndroid;
     private EvcardQueryEmountActivityAndroid emountActivityAndroid;
@@ -51,6 +55,10 @@ public class BusinessTest {
 
     @BeforeTest
     public void setUp() throws Exception {
+
+
+        appiumServer = new AppiumServer();
+        appiumServer.runServer(4723, "LC75RZ901613");
         androidDriver = GeneralTestOperation.testSetUp();
 //        androidDriver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
     }
@@ -93,9 +101,11 @@ public class BusinessTest {
 
     @Test
     public void MainMenuTraversalTest() {
+        System.out.println(androidDriver.getPageSource());
         /* skip splash screen */
         splashActivity = new EvcardSplashActivity(androidDriver);
         splashActivity.clickSkipBtn();
+        System.out.println(androidDriver.getPageSource());
         /* close activity page when it appears */
         mainActivityAndroid = new EvcardMainActivityAndroid(androidDriver);
         mainActivityAndroid.closeActivityPage();
@@ -110,16 +120,17 @@ public class BusinessTest {
 
         /* open user information */
         mainActivityAndroid.clickImgHead();
+        System.out.println(androidDriver.getPageSource());
         /* open modify phone */
         userInfosActivityAndroid = new EvcardUserInfosActivityAndroid(androidDriver);
         userInfosActivityAndroid.clickModifyPhone();
         /* back to user information */
-        modifyPhoneActivityAndroid = new EvcardModifyPhoneActivityAndroid((androidDriver));
+        modifyPhoneActivityAndroid = new EvcardModifyPhoneActivityAndroid(androidDriver);
         modifyPhoneActivityAndroid.clickBack();
         /* open identification */
         userInfosActivityAndroid.clickIdentification();
         /* back to user information */
-        userInfoUploadActivityAndroid = new EvcardUserInfoUploadActivityAndroid((androidDriver));
+        userInfoUploadActivityAndroid = new EvcardUserInfoUploadActivityAndroid(androidDriver);
         userInfoUploadActivityAndroid.clickBack();
         /* open application process query */
         userInfosActivityAndroid.clickProgressQuery();
@@ -227,29 +238,75 @@ public class BusinessTest {
             textView = androidDriver.findElement(By.id("com.baosight.carsharing:id/new_allow_car_count"));
             string = textView.getText();
         }
+        /* swipe the panel */
         mainActivityAndroid.swipeFromBottom();
+        /* choose the first available car */
         List<AndroidElement> availableCars = mainActivityAndroid.getAvailableCarList();
         availableCars.get(0).click();
+        /* leasing */
         mainActivityAndroid.clickLeasing();
+        /* confirm service fee if required */
         mainActivityAndroid.confirmServiceFee();
+        /* ordering success */
         mainActivityAndroid.clickOrderingSuccess();
+        /* get car manual */
         mainActivityAndroid.clickGetCarManually();
+        /* confirm get car */
         mainActivityAndroid.clickConfirmGetCar();
+        /* return car */
         mainActivityAndroid.clickReturnCar();
+        /* confirm return car */
         mainActivityAndroid.clickConfirmReturnCar();
+        /* confirm payment */
         mainActivityAndroid.clickConfirmPayment();
+        /* choose 5 stars */
         mainActivityAndroid.click5Star();
+        /* check first comment */
         mainActivityAndroid.checkGreat();
+        /* input text comment */
         mainActivityAndroid.fillComment("666");
+        /* confirm comment */
         mainActivityAndroid.clickSubmitComment();
+        /* payment */
         mainActivityAndroid.clickPayment();
+        /* confirm payment */
         mainActivityAndroid.clickConfirmPayment();
+        /* finish leasing procedure */
         mainActivityAndroid.clickFinish();
     }
+
+    @Test
+    public void getToastTest() {
+        /* skip splash screen */
+        splashActivity = new EvcardSplashActivity(androidDriver);
+        splashActivity.clickSkipBtn();
+        /* close activity page and welcome page if they appear */
+        mainActivityAndroid = new EvcardMainActivityAndroid(androidDriver);
+        mainActivityAndroid.closeActivityPage();
+        mainActivityAndroid.closeWelcomePage();
+        mainActivityAndroid.clickMenu();
+        mainActivityAndroid.clickWallet();
+        walletActivityAndroid = new EvcardWalletActivityAndroid(androidDriver);
+        walletActivityAndroid.clickEbiCharge();
+        eChargeActivityAndroid = new EvcardEChargeActivityAndroid(androidDriver);
+        eChargeActivityAndroid.clickRecharge();
+
+        String message = "请输入充值金额";
+        try {
+            AndroidDriverWait wait = new AndroidDriverWait(androidDriver, 5);
+
+            WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//*[contains(@text,'" + message + "')]")));
+            System.out.println(element.toString());
+        } catch (Exception e) {
+            System.out.println(">>> no toast");
+        }
+    }
+
 
     @AfterClass
     public void tearDown() {
         androidDriver.closeApp();
+        appiumServer.stopserver();
     }
 
     public static AndroidDriver<AndroidElement> getDriver() {

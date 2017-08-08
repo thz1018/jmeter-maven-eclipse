@@ -1,7 +1,10 @@
 package testcase;
 
+import com.tools.AppiumServer;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.remote.AutomationName;
+import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -41,7 +44,7 @@ class GeneralTestOperation {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("deviceName", properties.getProperty("deviceName", "test"));
         capabilities.setCapability("platformVersion", properties.getProperty("platformVersion", "test"));
-        capabilities.setCapability("udid", properties.getProperty("udid", "test"));
+//        capabilities.setCapability("udid", properties.getProperty("udid", "test"));
         capabilities.setCapability("appPackage", properties.getProperty("appPackage", "test"));
         capabilities.setCapability("app", app.getAbsolutePath());
         /* do not install every time */
@@ -50,6 +53,7 @@ class GeneralTestOperation {
         capabilities.setCapability("unicodeKeyboard", "True");
         /* reset to default keyboard after operations */
         capabilities.setCapability("resetKeyboard", "True");
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
         AndroidDriver<AndroidElement> androidDriver = new AndroidDriver<AndroidElement>(new URL(properties.getProperty("url", "test")), capabilities);
         return androidDriver;
     }
